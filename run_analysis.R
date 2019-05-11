@@ -1,4 +1,4 @@
-# Download the dataset
+# 1. Download the dataset
  filename <- "Dataset.zip"
 
 if(!file.exists(filename)){
@@ -11,7 +11,7 @@ download.file(URL, destfile = "/Users/jing/Desktop/coursera/Dataset.zip", method
 
  setwd("/Users/jing/Desktop/coursera/UCI HAR Dataset")
  
-# Read training datasets
+# 2. Read training datasets
 X_train <- read.table("/Users/jing/Desktop/coursera/UCI HAR Dataset/train/X_train.txt")
 Y_train <- read.table("/Users/jing/Desktop/coursera/UCI HAR Dataset/train/y_train.txt")
 subject_train <- read.table("/Users/jing/Desktop/coursera/UCI HAR Dataset/train/subject_train.txt")
@@ -35,7 +35,7 @@ X_total <- rbind(X_train, X_test)
 Y_total <- rbind(Y_train, Y_test)
 subject <- rbind(subject_train, subject_test)
 
-# create sub dataset of the measurements on the mean and standard deviation for each measurement.
+# 3. create sub dataset of the measurements on the mean and standard deviation for each measurement.
 selected_var <- features[grep("mean\\(\\)|std\\(\\)",features[,2]),]
 
 X_total <- X_total[,selected_var[,1]]
@@ -49,13 +49,13 @@ activitylabel <- Y_total[,-1]
 
 colnames(X_total) <- features[selected_var[,1],2]
 
-# Creates a second, independent tidy data set with the mean
+#  4. Creates a second, independent tidy data set with the mean
 # of each variable for each activity and each subject.
 colnames(subject_total) <- "subject"
 total <- cbind(X_total, activitylabel, subject_total)
 total_mean <- total %>% group_by(activitylabel, subject) %>% summarize_each(funs(mean))
 
-# Get the required tidydata.txt 
+# 5. Get the required tidydata.txt 
 write.table(total_mean, file = "/Users/jing/Desktop/coursera/UCI HAR Dataset/tidydata.txt", row.names = FALSE, col.names = TRUE)
 
 
